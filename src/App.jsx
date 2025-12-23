@@ -34,22 +34,22 @@ function App() {
       id: 1,
       title: 'Daylight',
       artist: 'Taylor Swift',
-      albumArt: '/album-daylight.jpg',
-      audioPath: '/music/daylight.mp3'
+      albumArt: `${import.meta.env.BASE_URL}album-daylight.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/daylight.mp3`
     },
     {
       id: 2,
       title: 'Lover',
       artist: 'Taylor Swift',
-      albumArt: '/album-lover.jpg',
-      audioPath: '/music/lover.mp3'
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/lover.mp3`
     },
     {
       id: 3,
       title: 'All I Want for Christmas Is You',
       artist: 'Mariah Carey',
-      albumArt: '/album-christmas.jpg',
-      audioPath: '/music/all-i-want-for-christmas.mp3'
+      albumArt: `${import.meta.env.BASE_URL}album-christmas.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/all-i-want-for-christmas.mp3`
     }
   ]
 

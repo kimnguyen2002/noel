@@ -30,11 +30,11 @@ function GiftBox({ position, onCameraMove, onLidOpen, onCDClick, isLidOpen }) {
   })
 
   const cdCases = [
-    { id: 1, position: [-0.2, 0.5, 0], image: '/cd-case-1.jpg' },
-    { id: 2, position: [-0.1, 0.5, 0], image: '/cd-case-2.jpg' },
-    { id: 3, position: [0, 0.5, 0], image: '/cd-case-3.jpg' },
-    { id: 4, position: [0.1, 0.5, 0], image: '/cd-case-4.jpg' },
-    { id: 5, position: [0.2, 0.5, 0], image: '/cd-case-5.jpg' }
+    { id: 1, position: [-0.2, 0.5, 0], image: `${import.meta.env.BASE_URL}cd-case-1.jpg` },
+    { id: 2, position: [-0.1, 0.5, 0], image: `${import.meta.env.BASE_URL}cd-case-2.jpg` },
+    { id: 3, position: [0, 0.5, 0], image: `${import.meta.env.BASE_URL}cd-case-3.jpg` },
+    { id: 4, position: [0.1, 0.5, 0], image: `${import.meta.env.BASE_URL}cd-case-4.jpg` },
+    { id: 5, position: [0.2, 0.5, 0], image: `${import.meta.env.BASE_URL}cd-case-5.jpg` }
   ]
 
   return (

@@ -236,11 +236,11 @@ function Cat({ position }) {
 
 function CozyRoom({ onOpenMusicPlayer, isMusicPlaying }) {
   // load wall frame textures from public/ (add your second image as `wall-photo-2.jpg`)
-  const frameTex = useLoader(THREE.TextureLoader, '/wall-photo.jpg')
-  const frameTex2 = useLoader(THREE.TextureLoader, '/wall-photo-2.jpg')
-  const frameTex3 = useLoader(THREE.TextureLoader, '/wall-photo-3.jpg')
-  const frameTex4 = useLoader(THREE.TextureLoader, '/wall-photo-4.jpg')
-  const frameTex5 = useLoader(THREE.TextureLoader, '/wall-photo-5.jpg')
+  const frameTex = useLoader(THREE.TextureLoader, `${import.meta.env.BASE_URL}wall-photo.jpg`)
+  const frameTex2 = useLoader(THREE.TextureLoader, `${import.meta.env.BASE_URL}wall-photo-2.jpg`)
+  const frameTex3 = useLoader(THREE.TextureLoader, `${import.meta.env.BASE_URL}wall-photo-3.jpg`)
+  const frameTex4 = useLoader(THREE.TextureLoader, `${import.meta.env.BASE_URL}wall-photo-4.jpg`)
+  const frameTex5 = useLoader(THREE.TextureLoader, `${import.meta.env.BASE_URL}wall-photo-5.jpg`)
 
   // Simplified texture configuration to prevent jittering
   useEffect(() => {
