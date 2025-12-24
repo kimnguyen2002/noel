@@ -34,7 +34,7 @@ function App() {
       id: 1,
       title: 'Daylight',
       artist: 'Taylor Swift',
-      albumArt: `${import.meta.env.BASE_URL}album-daylight.jpg`,
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/daylight.mp3`
     },
     {
@@ -46,11 +46,312 @@ function App() {
     },
     {
       id: 3,
-      title: 'All I Want for Christmas Is You',
-      artist: 'Mariah Carey',
-      albumArt: `${import.meta.env.BASE_URL}album-christmas.jpg`,
-      audioPath: `${import.meta.env.BASE_URL}music/all-i-want-for-christmas.mp3`
-    }
+      title: 'You Are In Love',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-1989.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/love.mp3`
+    },
+    {
+      id: 4,
+      title: 'Love Story',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-fearless.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/love-story.mp3`
+    },
+    {
+      id: 5,
+      title: 'You Belong With Me',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-fearless.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/you-belong.mp3`
+    },
+    {
+      id: 6,
+      title: 'Enchanted',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-speak-now.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/enchanted.mp3`
+    },
+    {
+      id: 7,
+      title: '...ready for it?',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/mine.mp3`
+    },
+    {
+      id: 8,
+      title: 'End Game',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/end-game.mp3`
+    },
+    {
+      id: 9,
+      title: 'I Did Something Bad',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/i-did.mp3`
+    },
+    {
+      id: 10,
+      title: 'Don\'t Blame Me',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/dont-blame.mp3`
+    },
+    {
+      id: 11,
+      title: 'Delicate',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/delicate.mp3`
+    },
+    {
+      id: 12,
+      title: 'Look What You Made Me Do',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/look-what-you.mp3`
+    },
+    {
+      id: 13,
+      title: 'So It Goes...',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/so-it-goes.mp3`
+    },
+    {
+      id: 14,
+      title: 'Gorgeous',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/gorgeous.mp3`
+    },
+    {
+      id: 15,
+      title: 'Delicate',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/delicate.mp3`
+    },
+    {
+      id: 16,
+      title: 'Getaway Car',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/getaway.mp3`
+    },
+    {
+      id: 17,
+      title: 'King of My Heart',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/king.mp3`
+    },
+    {
+      id: 18,
+      title: 'Dancing With Our Hands Tied',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/dancing.mp3`
+    },
+    {
+      id: 19,
+      title: 'Dress',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/dress.mp3`
+    },
+    {
+      id: 20,
+      title: 'This Is Why We Can\'t Have Nice Things',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/this-is.mp3`
+    },
+    {
+      id: 21,
+      title: 'Call It What You Want',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/call-it.mp3`
+    },
+    {
+      id: 22,
+      title: 'New Year\'s Day',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/new-year.mp3`
+    },
+    {
+      id: 23,
+      title: 'Lavender Haze',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/lavender.mp3`
+    },
+    {
+      id: 24,
+      title: 'Maroon',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/maroon.mp3`
+    },
+    {
+      id: 25,
+      title: 'Anti-Hero',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/anti.mp3`
+    },
+    {
+      id: 26,
+      title: 'Snow on the Beach',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/snow.mp3`
+    },
+    {
+      id: 27,
+      title: 'You\'re On Your Own, Kid',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/kid.mp3`
+    },
+    {
+      id: 28,
+      title: 'Midnight Rain',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/midnight.mp3`
+    },
+    {
+      id: 29,
+      title: 'Question...?',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/question.mp3`
+    },
+    {
+      id: 30,
+      title: 'Vigilante Shit',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/vigilante.mp3`
+    },
+    {
+      id: 31,
+      title: 'Bejeweled',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/bejeweled.mp3`
+    },
+    {
+      id: 32,
+      title: 'Labyrinth',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/labyrinth.mp3`
+    },
+    {
+      id: 33,
+      title: 'Karma',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/karma.mp3`
+    },
+    {
+      id: 34,
+      title: 'Sweet Nothing',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/sweet.mp3`
+    },
+    {
+      id: 35,
+      title: 'The Fate of Ophelia',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/ophelia.mp3`
+    },
+    {
+      id: 36,
+      title: 'Elizabeth Taylor',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/elizabeth.mp3`
+    },
+    {
+      id: 37,
+      title: 'Opalite',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/opalite.mp3`
+    },
+    {
+      id: 38,
+      title: 'Father Figure',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/father.mp3`
+    },
+    {
+      id: 39,
+      title: 'Eldest Daughter',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/eldest-daughter.mp3`
+    },
+    {
+      id: 40,
+      title: 'Ruin The Friendship',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/ruin-friendship.mp3`
+    },
+    {
+      id: 41,
+      title: 'Actually Romantic',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/romantic.mp3`
+    },
+    {
+      id: 42,
+      title: 'Wi$h Li$t',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/wish.mp3`
+    },
+    {
+      id: 43,
+      title: 'Wood',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/wood.mp3`
+    },
+    {
+      id: 44,
+      title: 'CANCELLED!',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/cancelled.mp3`
+    },
+    {
+      id: 45,
+      title: 'Honey',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/honey.mp3`
+    },
+    {
+      id: 46,
+      title: 'The Life of a Showgirl',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/showgirl.mp3`
+    },
   ]
 
   const handleLetterClick = (letter) => {
@@ -103,7 +404,7 @@ function App() {
     if (isPlaying) {
       audio.play().catch(err => console.log('Playback prevented:', err))
     }
-  }, [currentSong, isPlaying])
+  }, [currentSong])
 
   const handlePlayPause = () => {
     const audio = audioRef.current
