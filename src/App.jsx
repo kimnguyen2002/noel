@@ -46,123 +46,257 @@ function App() {
     },
     {
       id: 3,
+      title: 'I Forgot That You Existed',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/i-forgot.mp3`
+    },
+    {
+      id: 4,
+      title: 'Cruel Summer',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/cruel-summer.mp3`
+    },
+    {
+      id: 5,
+      title: 'The Man',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/man.mp3`
+    },
+    {
+      id: 6,
+      title: 'The Archer',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/the-archer.mp3`
+    },
+    {
+      id: 7,
+      title: 'I Think He Knows',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/i-think.mp3`
+    },
+    {
+      id: 8,
+      title: 'Miss Americana & The Heartbreak Prince',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/miss-americana.mp3`
+    },
+    {
+      id: 9,
+      title: 'Paper Rings',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/paper-rings.mp3`
+    },
+    {
+      id: 10,
+      title: 'Cornelia Street',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/cornelia.mp3`
+    },
+    {
+      id: 11,
+      title: 'Death By A Thousand Cuts',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/death.mp3`
+    },
+    {
+      id: 12,
+      title: 'London Boy',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/london-boy.mp3`
+    },
+    {
+      id: 13,
+      title: 'Soon You’ll Get Better',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/soon.mp3`
+    },
+    {
+      id: 14,
+      title: 'False God',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/false.mp3`
+    },
+    {
+      id: 15,
+      title: 'You Need To Calm Down',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/calm-down.mp3`
+    },
+    {
+      id: 16,
+      title: 'Afterglow',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/afterglow.mp3`
+    },
+    {
+      id: 17,
+      title: 'ME! (feat. Brendon Urie of Panic! At The Disco)',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/me.mp3`
+    },
+    {
+      id: 18,
+      title: 'It’s Nice To Have A Friend',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-lover.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/friend.mp3`
+    },
+    {
+      id: 19,
       title: 'You Are In Love',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-1989.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/love.mp3`
     },
     {
-      id: 4,
+      id: 20,
       title: 'Love Story',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-fearless.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/love-story.mp3`
     },
     {
-      id: 5,
+      id: 21,
       title: 'You Belong With Me',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-fearless.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/you-belong.mp3`
     },
     {
-      id: 6,
+      id: 22,
       title: 'Enchanted',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-speak-now.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/enchanted.mp3`
     },
     {
-      id: 7,
+      id: 23,
       title: '...ready for it?',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/mine.mp3`
     },
     {
-      id: 8,
+      id: 24,
       title: 'End Game',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/end-game.mp3`
     },
     {
-      id: 9,
+      id: 25,
       title: 'I Did Something Bad',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/i-did.mp3`
     },
     {
-      id: 10,
+      id: 26,
       title: 'Don\'t Blame Me',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/dont-blame.mp3`
     },
     {
-      id: 11,
+      id: 27,
       title: 'Delicate',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/delicate.mp3`
     },
     {
-      id: 12,
+      id: 28,
       title: 'Look What You Made Me Do',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/look-what-you.mp3`
     },
     {
-      id: 13,
+      id: 29,
       title: 'So It Goes...',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/so-it-goes.mp3`
     },
     {
-      id: 14,
+      id: 30,
       title: 'Gorgeous',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/gorgeous.mp3`
     },
     {
-      id: 15,
+      id: 31,
       title: 'Delicate',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/delicate.mp3`
     },
     {
-      id: 16,
+      id: 32,
       title: 'Getaway Car',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/getaway.mp3`
     },
     {
-      id: 17,
+      id: 33,
       title: 'King of My Heart',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/king.mp3`
     },
     {
-      id: 18,
+      id: 34,
       title: 'Dancing With Our Hands Tied',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/dancing.mp3`
     },
     {
-      id: 19,
+      id: 35,
       title: 'Dress',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/dress.mp3`
     },
+    {
+      id: 36,
+      title: 'This Is Why We Can\'t Have Nice Things',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/this-is.mp3`
+    },
+    {
+      id: 37,
+      title: 'Call It What You Want',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/call-it.mp3`
+    },
+    {
+      id: 38,
+      title: 'New Year\'s Day',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/new-year.mp3`
+    },
+    // ...existing code tiếp...
     {
       id: 20,
       title: 'This Is Why We Can\'t Have Nice Things',
