@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import ChristmasTree from './components/ChristmasTree'
 import CozyRoom from './components/CozyRoom'
 import SnowEffect from './components/SnowEffect'
@@ -10,6 +10,8 @@ import CDCaseDisplay from './components/CDCaseDisplay'
 import GiftBox from './components/GiftBox'
 import Couple from './components/Couple'
 import './App.css'
+
+const MAX_PLAY_HISTORY = 15
 
 function App() {
   const [selectedLetter, setSelectedLetter] = useState(null)
@@ -25,8 +27,16 @@ function App() {
   const [playbackMode, setPlaybackMode] = useState('sequential')
   // Custom playlist
   const [myPlaylist, setMyPlaylist] = useState([])
-  // Active view: 'all' | 'playlist'
+  // Active view: 'all' | 'playlist' | 'albums'
   const [activeView, setActiveView] = useState('all')
+  // Selected album for album view
+  const [selectedAlbum, setSelectedAlbum] = useState(null)
+  // Track played songs for smart shuffle (no repeats until all played)
+  const shufflePlayedRef = useRef(new Set())
+  // Track play request to cancel stale requests and prevent AbortError
+  const playRequestIdRef = useRef(0)
+  // Track playback history for proper previous button behavior
+  const playHistoryRef = useRef([])
 
   // Gift box states
   const [isGiftBoxLidOpen, setIsGiftBoxLidOpen] = useState(false)
@@ -473,10 +483,53 @@ function App() {
     },
   ]
 
+  // Memoize albums calculation to prevent recalculation on every render
+  const albums = useMemo(() => {
+    const albumMap = new Map()
+    songs.forEach(song => {
+      const albumName = song.albumArt.split('/').pop().replace('album-', '').replace('.jpg', '')
+      if (!albumMap.has(albumName)) {
+        albumMap.set(albumName, {
+          name: albumName,
+          art: song.albumArt,
+          songs: []
+        })
+      }
+      albumMap.get(albumName).songs.push(song)
+    })
+    return Array.from(albumMap.values())
+  }, []) // Empty deps since songs is defined in component
+
+  // Get songs for current album
+  const albumSongs = useMemo(() => {
+    if (!selectedAlbum) return []
+    const album = albums.find(a => a.name === selectedAlbum)
+    return album ? album.songs : []
+  }, [selectedAlbum, albums])
+
+  // Get the active song list based on current view
+  const getActiveSongList = useCallback(() => {
+    if (activeView === 'albums' && selectedAlbum) {
+      return albumSongs
+    }
+    return activeView === 'playlist' && myPlaylist.length > 0 ? myPlaylist : songs
+  }, [activeView, selectedAlbum, albumSongs, myPlaylist, songs])
+
   const handleLetterClick = (letter) => {
     setSelectedLetter(letter)
     setClickedLetters(prev => new Set([...prev, letter.id]))
   }
+
+  // Helper to add song to history with size limit
+  const addToPlayHistory = useCallback((song) => {
+    if (song) {
+      playHistoryRef.current.push(song)
+      // Keep only the last MAX_PLAY_HISTORY songs
+      if (playHistoryRef.current.length > MAX_PLAY_HISTORY) {
+        playHistoryRef.current.shift()
+      }
+    }
+  }, [])
 
   const handleOpenMusicPlayer = () => {
     setIsMusicPlayerOpen(true)
@@ -487,6 +540,10 @@ function App() {
   }
 
   const handleSongSelect = (song) => {
+    // Add current song to history before switching
+    if (currentSong && currentSong.id !== song.id) {
+      addToPlayHistory(currentSong)
+    }
     setCurrentSong(song)
     setIsPlaying(true)
   }
@@ -521,39 +578,98 @@ function App() {
   // Switch view between all songs and playlist
   const handleViewChange = (view) => {
     setActiveView(view)
+    if (view !== 'albums') {
+      setSelectedAlbum(null)
+    }
+    // Reset shuffle tracking when changing view
+    shufflePlayedRef.current = new Set()
   }
 
+  // Select album and show its songs
+  const handleSelectAlbum = (albumName) => {
+    setSelectedAlbum(albumName)
+    // Reset shuffle tracking when changing album
+    shufflePlayedRef.current = new Set()
+  }
+
+  // Smart shuffle helper - picks next song without repeating until all played
+  const getSmartShuffleNextIndex = useCallback((activeSongs, currentIndex) => {
+    const playedSet = shufflePlayedRef.current
+    playedSet.add(currentIndex)
+    
+    // If all songs have been played, reset
+    if (playedSet.size >= activeSongs.length) {
+      shufflePlayedRef.current = new Set([currentIndex])
+    }
+    
+    // Find unplayed songs
+    const unplayedIndices = []
+    for (let i = 0; i < activeSongs.length; i++) {
+      if (!shufflePlayedRef.current.has(i) && i !== currentIndex) {
+        unplayedIndices.push(i)
+      }
+    }
+    
+    if (unplayedIndices.length > 0) {
+      return unplayedIndices[Math.floor(Math.random() * unplayedIndices.length)]
+    }
+    
+    // Fallback: pick any random song different from current
+    let nextIndex
+    do {
+      nextIndex = Math.floor(Math.random() * activeSongs.length)
+    } while (nextIndex === currentIndex && activeSongs.length > 1)
+    return nextIndex
+  }, [])
+
   // Play next song
-  const handleNextSong = () => {
+  const handleNextSong = useCallback(() => {
     const activeSongs = getActiveSongList()
     const currentIndex = activeSongs.findIndex(s => s.id === currentSong?.id)
+    if (currentIndex !== -1) {
+      // Add current song to history
+      addToPlayHistory(currentSong)
+    }
 
     if (playbackMode === 'shuffle') {
-      let nextIndex
-      do {
-        nextIndex = Math.floor(Math.random() * activeSongs.length)
-      } while (nextIndex === currentIndex && activeSongs.length > 1)
-      setCurrentSong(activeSongs[nextIndex])
+      // Use smart shuffle for albums and playlist
+      if ((activeView === 'albums' && selectedAlbum) || (activeView === 'playlist' && myPlaylist.length > 0)) {
+        const nextIndex = getSmartShuffleNextIndex(activeSongs, currentIndex)
+        setCurrentSong(activeSongs[nextIndex])
+      } else {
+        // Normal shuffle for "All" view
+        let nextIndex
+        do {
+          nextIndex = Math.floor(Math.random() * activeSongs.length)
+        } while (nextIndex === currentIndex && activeSongs.length > 1)
+        setCurrentSong(activeSongs[nextIndex])
+      }
     } else {
       const nextIndex = (currentIndex + 1) % activeSongs.length
       setCurrentSong(activeSongs[nextIndex])
     }
     setIsPlaying(true)
-  }
+  }, [getActiveSongList, currentSong, playbackMode, activeView, selectedAlbum, myPlaylist, getSmartShuffleNextIndex, addToPlayHistory])
 
   // Play previous song
-  const handlePrevSong = () => {
-    const activeSongs = getActiveSongList()
-    const currentIndex = activeSongs.findIndex(s => s.id === currentSong?.id)
-    const prevIndex = currentIndex <= 0 ? activeSongs.length - 1 : currentIndex - 1
-    setCurrentSong(activeSongs[prevIndex])
+  const handlePrevSong = useCallback(() => {
+    // If in shuffle mode and there's history, go back to previous played song
+    if (playbackMode === 'shuffle' && playHistoryRef.current.length > 0) {
+      const prevSong = playHistoryRef.current.pop()
+      // Add current song to history for forward navigation
+      addToPlayHistory(currentSong)
+      setCurrentSong(prevSong)
+    } else {
+      // In sequential mode, go to previous in order
+      const activeSongs = getActiveSongList()
+      const currentIndex = activeSongs.findIndex(s => s.id === currentSong?.id)
+      const prevIndex = currentIndex <= 0 ? activeSongs.length - 1 : currentIndex - 1
+      setCurrentSong(activeSongs[prevIndex])
+      // Add current song to history
+      addToPlayHistory(currentSong)
+    }
     setIsPlaying(true)
-  }
-
-  // Get the active song list based on current view
-  const getActiveSongList = () => {
-    return activeView === 'playlist' && myPlaylist.length > 0 ? myPlaylist : songs
-  }
+  }, [getActiveSongList, currentSong, playbackMode, addToPlayHistory])
 
   // Auto-play when song ends based on playback mode
   useEffect(() => {
@@ -567,42 +683,78 @@ function App() {
       if (playbackMode === 'repeat-one') {
         // Repeat current song
         audio.currentTime = 0
-        audio.play().catch(err => console.log('Playback prevented:', err))
+        // Clear history when repeating the same song
+        playHistoryRef.current = []
+        audio.play().catch(err => {
+          if (err.name !== 'AbortError') {
+            console.log('Playback error:', err)
+          }
+        })
         return
       }
 
       if (playbackMode === 'sequential') {
         // Play next song in order
+        addToPlayHistory(currentSong)
         const nextIndex = (currentIndex + 1) % activeSongs.length
         setCurrentSong(activeSongs[nextIndex])
         setIsPlaying(true)
       } else {
-        // Shuffle mode - random song
-        let nextIndex
-        do {
-          nextIndex = Math.floor(Math.random() * activeSongs.length)
-        } while (nextIndex === currentIndex && activeSongs.length > 1)
-        setCurrentSong(activeSongs[nextIndex])
+        // Shuffle mode - use smart shuffle for albums and playlist
+        addToPlayHistory(currentSong)
+        if ((activeView === 'albums' && selectedAlbum) || (activeView === 'playlist' && myPlaylist.length > 0)) {
+          const nextIndex = getSmartShuffleNextIndex(activeSongs, currentIndex)
+          setCurrentSong(activeSongs[nextIndex])
+        } else {
+          // Normal shuffle for "All" view
+          let nextIndex
+          do {
+            nextIndex = Math.floor(Math.random() * activeSongs.length)
+          } while (nextIndex === currentIndex && activeSongs.length > 1)
+          setCurrentSong(activeSongs[nextIndex])
+        }
         setIsPlaying(true)
       }
     }
 
     audio.addEventListener('ended', handleEnded)
     return () => audio.removeEventListener('ended', handleEnded)
-  }, [currentSong, songs, playbackMode, activeView, myPlaylist])
+  }, [currentSong, playbackMode, activeView, myPlaylist, selectedAlbum, getActiveSongList, getSmartShuffleNextIndex, addToPlayHistory])
 
   // Load and play song when changed
   useEffect(() => {
     const audio = audioRef.current
     if (!audio || !currentSong) return
 
+    // Increment request ID to cancel any pending play requests
+    const currentRequestId = ++playRequestIdRef.current
+
+    // Pause current playback before loading new song
+    audio.pause()
     audio.src = currentSong.audioPath
     audio.load()
 
     if (isPlaying) {
-      audio.play().catch(err => console.log('Playback prevented:', err))
+      // Wait for canplay event before attempting to play
+      const handleCanPlay = () => {
+        // Only play if this is still the current request
+        if (playRequestIdRef.current === currentRequestId) {
+          audio.play().catch(err => {
+            // Ignore AbortError as it's expected when rapidly switching songs
+            if (err.name !== 'AbortError') {
+              console.log('Playback error:', err)
+            }
+          })
+        }
+        audio.removeEventListener('canplay', handleCanPlay)
+      }
+      audio.addEventListener('canplay', handleCanPlay)
+      
+      return () => {
+        audio.removeEventListener('canplay', handleCanPlay)
+      }
     }
-  }, [currentSong])
+  }, [currentSong, isPlaying])
 
   const handlePlayPause = () => {
     const audio = audioRef.current
@@ -610,10 +762,23 @@ function App() {
 
     if (isPlaying) {
       audio.pause()
+      setIsPlaying(false)
     } else {
-      audio.play().catch(err => console.log('Playback prevented:', err))
+      const playPromise = audio.play()
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true)
+          })
+          .catch(err => {
+            if (err.name !== 'AbortError') {
+              console.log('Playback error:', err)
+            }
+          })
+      } else {
+        setIsPlaying(true)
+      }
     }
-    setIsPlaying(!isPlaying)
   }
 
   const handleTimeUpdate = () => {
@@ -773,6 +938,10 @@ function App() {
         onNextSong={handleNextSong}
         onPrevSong={handlePrevSong}
         onReorderPlaylist={handleReorderPlaylist}
+        albums={albums}
+        selectedAlbum={selectedAlbum}
+        onSelectAlbum={handleSelectAlbum}
+        albumSongs={albumSongs}
       />
 
       {/* CD Case Display Modal */}

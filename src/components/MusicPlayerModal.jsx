@@ -21,7 +21,11 @@ function MusicPlayerModal({
   onViewChange,
   onNextSong,
   onPrevSong,
-  onReorderPlaylist
+  onReorderPlaylist,
+  albums,
+  selectedAlbum,
+  onSelectAlbum,
+  albumSongs
 }) {
   const modalRef = useRef(null)
   const [draggedIndex, setDraggedIndex] = useState(null)
@@ -78,9 +82,9 @@ function MusicPlayerModal({
   const getPlaybackModeIcon = () => {
     switch (playbackMode) {
       case 'sequential':
-        return '↻'
+        return '🔤'
       case 'repeat-one':
-        return '🔂'
+        return '🔁'
       case 'shuffle':
       default:
         return '🔀'
@@ -141,7 +145,7 @@ function MusicPlayerModal({
   }
 
   // Get songs to display based on active view
-  const displaySongs = activeView === 'playlist' ? myPlaylist : songs
+  const displaySongs = activeView === 'playlist' ? myPlaylist : (activeView === 'albums' && selectedAlbum ? albumSongs : songs)
 
   if (!isOpen) return null
 
@@ -161,6 +165,12 @@ function MusicPlayerModal({
             All ({songs.length})
           </button>
           <button
+            className={`music-tab ${activeView === 'albums' ? 'active' : ''}`}
+            onClick={() => onViewChange('albums')}
+          >
+            Albums ({albums?.length || 0})
+          </button>
+          <button
             className={`music-tab ${activeView === 'playlist' ? 'active' : ''}`}
             onClick={() => onViewChange('playlist')}
           >
@@ -168,20 +178,40 @@ function MusicPlayerModal({
           </button>
         </div>
 
-        {/* Playback Mode Control */}
-        <div className="music-playback-mode">
-          <button
-            className="music-mode-btn"
-            onClick={cyclePlaybackMode}
-            title={getPlaybackModeLabel()}
-          >
-            <span className="mode-icon">{getPlaybackModeIcon()}</span>
-            <span className="mode-label">{getPlaybackModeLabel()}</span>
+        {/* Album List View */}
+        {activeView === 'albums' && !selectedAlbum && (
+          <div className="music-album-grid">
+            {albums?.length === 0 ? (
+              <div className="music-empty-playlist">
+                <p>No Albums</p>
+              </div>
+            ) : (
+              albums.map(album => (
+                <div
+                  key={album.name}
+                  className="music-album-item"
+                  onClick={() => onSelectAlbum(album.name)}
+                >
+                  <img src={album.art} alt={album.name} className="music-album-thumbnail" />
+                  <div className="music-album-info">
+                    <div className="music-album-name">{album.name.replace(/-/g, ' ').toUpperCase()}</div>
+                    <div className="music-album-count">{album.songs.length} songs</div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {/* Back button for album view */}
+        {activeView === 'albums' && selectedAlbum && (
+          <button className="music-back-button" onClick={() => onSelectAlbum(null)}>
+            ← Back to Albums
           </button>
-        </div>
+        )}
 
         {/* Song List */}
-        <div className="music-song-list">
+        <div className={`music-song-list ${activeView === 'albums' && !selectedAlbum ? 'hidden' : ''}`}>
           {displaySongs.length === 0 ? (
             <div className="music-empty-playlist">
               <p>Empty Playlist</p>
@@ -240,6 +270,13 @@ function MusicPlayerModal({
                 <div className="music-current-title">{currentSong.title}</div>
                 <div className="music-current-artist">{currentSong.artist}</div>
               </div>
+              <button
+                className="music-mode-btn-now-playing"
+                onClick={cyclePlaybackMode}
+                title={getPlaybackModeLabel()}
+              >
+                <span className="mode-icon">{getPlaybackModeIcon()}</span>
+              </button>
             </div>
 
             {/* Progress Bar */}

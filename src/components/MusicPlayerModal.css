@@ -142,7 +142,10 @@
   overflow-y: auto;
   padding: min(1.2vw, 10px) min(2vw, 14px);
   margin-bottom: min(2vw, 12px);
-  max-height: 300px;
+  /* allow the list to grow inside the modal and scroll when needed */
+  flex: 1;
+  min-height: 300px;
+  max-height: none;
 }
 
 /* Empty playlist state */
@@ -354,6 +357,7 @@
   display: flex;
   align-items: center;
   margin-bottom: min(2vw, 15px);
+  justify-content: space-between;
 }
 
 .music-current-album {
@@ -549,4 +553,112 @@
   .music-controls {
     gap: 8px;
   }
+}
+
+/* Album Grid View */
+.music-album-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  overflow-y: auto;
+  padding: min(1.2vw, 10px) min(2vw, 14px);
+  margin-bottom: min(2vw, 12px);
+  flex: 1;
+  min-height: 300px;
+  max-height: none;
+}
+
+.music-album-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.music-album-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.music-album-thumbnail {
+  width: clamp(80px, 14vw, 140px);
+  height: clamp(80px, 14vw, 140px);
+  border-radius: 6px;
+  object-fit: cover;
+  margin-bottom: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.04);
+}
+
+.music-album-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.music-album-name {
+  font-size: clamp(12px, 2vw, 14px);
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.music-album-count {
+  font-size: clamp(11px, 1.8vw, 12px);
+  color: #b0b0b0;
+}
+
+/* Back button for album view */
+.music-back-button {
+  padding: 10px 16px;
+  margin: 10px 14px 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #b0b0b0;
+  font-size: clamp(12px, 2vw, 14px);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.music-back-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Hide song list when showing albums */
+.music-song-list.hidden {
+  display: none;
+}
+
+/* Playback mode button in now playing */
+.music-mode-btn-now-playing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #b0b0b0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.music-mode-btn-now-playing:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.music-mode-btn-now-playing .mode-icon {
+  font-size: clamp(16px, 2.5vw, 20px);
 }
