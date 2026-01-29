@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './MusicPlayerModal.css'
 
 function MusicPlayerModal({
@@ -11,9 +11,21 @@ function MusicPlayerModal({
   currentTime,
   duration,
   onPlayPause,
-  onSeek
+  onSeek,
+  playbackMode,
+  onPlaybackModeChange,
+  myPlaylist,
+  onAddToPlaylist,
+  onRemoveFromPlaylist,
+  activeView,
+  onViewChange,
+  onNextSong,
+  onPrevSong,
+  onReorderPlaylist
 }) {
   const modalRef = useRef(null)
+  const [draggedIndex, setDraggedIndex] = useState(null)
+  const [dragOverIndex, setDragOverIndex] = useState(null)
 
   useEffect(() => {
     const handleEscape = (e) => {
@@ -50,6 +62,87 @@ function MusicPlayerModal({
     return `${minutes}:${seconds.toString().padStart(2, '0')}`
   }
 
+  const isInPlaylist = (song) => {
+    return myPlaylist.some(s => s.id === song.id)
+  }
+
+  const handlePlaylistToggle = (e, song) => {
+    e.stopPropagation()
+    if (isInPlaylist(song)) {
+      onRemoveFromPlaylist(song)
+    } else {
+      onAddToPlaylist(song)
+    }
+  }
+
+  const getPlaybackModeIcon = () => {
+    switch (playbackMode) {
+      case 'sequential':
+        return '↻'
+      case 'repeat-one':
+        return '🔂'
+      case 'shuffle':
+      default:
+        return '🔀'
+    }
+  }
+
+  const getPlaybackModeLabel = () => {
+    switch (playbackMode) {
+      case 'sequential':
+        return 'In order'
+      case 'repeat-one':
+        return 'Repeat'
+      case 'shuffle':
+      default:
+        return 'Shuffle'
+    }
+  }
+
+  const cyclePlaybackMode = () => {
+    const modes = ['shuffle', 'sequential', 'repeat-one']
+    const currentIndex = modes.indexOf(playbackMode)
+    const nextIndex = (currentIndex + 1) % modes.length
+    onPlaybackModeChange(modes[nextIndex])
+  }
+
+  // Drag and drop handlers
+  const handleDragStart = (e, index) => {
+    if (activeView !== 'playlist') return
+    setDraggedIndex(index)
+    e.dataTransfer.effectAllowed = 'move'
+  }
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault()
+    if (activeView !== 'playlist' || draggedIndex === null) return
+    setDragOverIndex(index)
+  }
+
+  const handleDragLeave = () => {
+    setDragOverIndex(null)
+  }
+
+  const handleDrop = (e, toIndex) => {
+    e.preventDefault()
+    if (activeView !== 'playlist' || draggedIndex === null) return
+
+    if (draggedIndex !== toIndex) {
+      onReorderPlaylist(draggedIndex, toIndex)
+    }
+
+    setDraggedIndex(null)
+    setDragOverIndex(null)
+  }
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null)
+    setDragOverIndex(null)
+  }
+
+  // Get songs to display based on active view
+  const displaySongs = activeView === 'playlist' ? myPlaylist : songs
+
   if (!isOpen) return null
 
   return (
@@ -59,24 +152,83 @@ function MusicPlayerModal({
 
         <h2 className="music-modal-title">🎵 Music Player</h2>
 
+        {/* View Tabs */}
+        <div className="music-tabs">
+          <button
+            className={`music-tab ${activeView === 'all' ? 'active' : ''}`}
+            onClick={() => onViewChange('all')}
+          >
+            All ({songs.length})
+          </button>
+          <button
+            className={`music-tab ${activeView === 'playlist' ? 'active' : ''}`}
+            onClick={() => onViewChange('playlist')}
+          >
+            My Playlist ({myPlaylist.length})
+          </button>
+        </div>
+
+        {/* Playback Mode Control */}
+        <div className="music-playback-mode">
+          <button
+            className="music-mode-btn"
+            onClick={cyclePlaybackMode}
+            title={getPlaybackModeLabel()}
+          >
+            <span className="mode-icon">{getPlaybackModeIcon()}</span>
+            <span className="mode-label">{getPlaybackModeLabel()}</span>
+          </button>
+        </div>
+
         {/* Song List */}
         <div className="music-song-list">
-          {songs.map((song) => (
-            <div
-              key={song.id}
-              className={`music-song-item ${currentSong?.id === song.id ? 'active' : ''}`}
-              onClick={() => handleSongClick(song)}
-            >
-              <img src={song.albumArt} alt={song.title} className="music-album-art" />
-              <div className="music-song-info">
-                <div className="music-song-title">{song.title}</div>
-                <div className="music-song-artist">{song.artist}</div>
-              </div>
-              {currentSong?.id === song.id && isPlaying && (
-                <div className="music-playing-indicator">♪</div>
-              )}
+          {displaySongs.length === 0 ? (
+            <div className="music-empty-playlist">
+              <p>Empty Playlist</p>
+              <p className="music-empty-hint">Press + to add songs to the playlist</p>
+              <p className="music-empty-hint">Drag and drop to reorder songs in the playlist</p>
             </div>
-          ))}
+          ) : (
+            displaySongs.map((song, index) => (
+              <div
+                key={song.id}
+                className={`music-song-item ${currentSong?.id === song.id ? 'active' : ''} ${draggedIndex === index ? 'dragging' : ''} ${dragOverIndex === index ? 'drag-over' : ''}`}
+                onClick={() => handleSongClick(song)}
+                draggable={activeView === 'playlist'}
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragOver={(e) => handleDragOver(e, index)}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, index)}
+                onDragEnd={handleDragEnd}
+              >
+                {/* Order number for playlist */}
+                {activeView === 'playlist' && (
+                  <div className="music-order-number">{index + 1}</div>
+                )}
+
+                <img src={song.albumArt} alt={song.title} className="music-album-art" />
+                <div className="music-song-info">
+                  <div className="music-song-title">{song.title}</div>
+                  <div className="music-song-artist">{song.artist}</div>
+                </div>
+                {currentSong?.id === song.id && isPlaying && (
+                  <div className="music-playing-indicator">♪</div>
+                )}
+                <button
+                  className={`music-playlist-toggle ${isInPlaylist(song) ? 'in-playlist' : ''}`}
+                  onClick={(e) => handlePlaylistToggle(e, song)}
+                  title={isInPlaylist(song) ? 'Remove from playlist' : 'Add to playlist'}
+                >
+                  {isInPlaylist(song) ? '✓' : '+'}
+                </button>
+
+                {/* Drag handle for playlist */}
+                {activeView === 'playlist' && (
+                  <div className="music-drag-handle" title="Drag to reorder">⋮⋮</div>
+                )}
+              </div>
+            ))
+          )}
         </div>
 
         {/* Now Playing Section */}
@@ -102,10 +254,18 @@ function MusicPlayerModal({
               <span className="music-time">{formatTime(duration)}</span>
             </div>
 
-            {/* Play/Pause Button */}
-            <button className="music-play-button" onClick={onPlayPause}>
-              {isPlaying ? '⏸' : '▶'}
-            </button>
+            {/* Playback Controls */}
+            <div className="music-controls">
+              <button className="music-control-btn" onClick={onPrevSong} title="Previous">
+                ⏮
+              </button>
+              <button className="music-play-button" onClick={onPlayPause}>
+                {isPlaying ? '⏸' : '▶'}
+              </button>
+              <button className="music-control-btn" onClick={onNextSong} title="Next">
+                ⏭
+              </button>
+            </div>
           </div>
         )}
       </div>

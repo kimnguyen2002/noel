@@ -21,6 +21,13 @@ function App() {
   const [duration, setDuration] = useState(0)
   const audioRef = useRef(null)
 
+  // Playback mode: 'shuffle' | 'sequential' | 'repeat-one'
+  const [playbackMode, setPlaybackMode] = useState('sequential')
+  // Custom playlist
+  const [myPlaylist, setMyPlaylist] = useState([])
+  // Active view: 'all' | 'playlist'
+  const [activeView, setActiveView] = useState('all')
+
   // Gift box states
   const [isGiftBoxLidOpen, setIsGiftBoxLidOpen] = useState(false)
   const [isCDCaseDisplayOpen, setIsCDCaseDisplayOpen] = useState(false)
@@ -242,245 +249,216 @@ function App() {
     },
     {
       id: 31,
-      title: 'Delicate',
-      artist: 'Taylor Swift',
-      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
-      audioPath: `${import.meta.env.BASE_URL}music/delicate.mp3`
-    },
-    {
-      id: 32,
       title: 'Getaway Car',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/getaway.mp3`
     },
     {
-      id: 33,
+      id: 32,
       title: 'King of My Heart',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/king.mp3`
     },
     {
-      id: 34,
+      id: 33,
       title: 'Dancing With Our Hands Tied',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/dancing.mp3`
     },
     {
-      id: 35,
+      id: 34,
       title: 'Dress',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/dress.mp3`
     },
     {
-      id: 36,
+      id: 35,
       title: 'This Is Why We Can\'t Have Nice Things',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/this-is.mp3`
+    },
+    {
+      id: 36,
+      title: 'Call It What You Want',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/call-it.mp3`
     },
     {
       id: 37,
-      title: 'Call It What You Want',
+      title: 'New Year\'s Day',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
-      audioPath: `${import.meta.env.BASE_URL}music/call-it.mp3`
+      audioPath: `${import.meta.env.BASE_URL}music/new-year.mp3`
     },
     {
       id: 38,
-      title: 'New Year\'s Day',
-      artist: 'Taylor Swift',
-      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
-      audioPath: `${import.meta.env.BASE_URL}music/new-year.mp3`
-    },
-    // ...existing code tiếp...
-    {
-      id: 20,
-      title: 'This Is Why We Can\'t Have Nice Things',
-      artist: 'Taylor Swift',
-      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
-      audioPath: `${import.meta.env.BASE_URL}music/this-is.mp3`
-    },
-    {
-      id: 21,
-      title: 'Call It What You Want',
-      artist: 'Taylor Swift',
-      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
-      audioPath: `${import.meta.env.BASE_URL}music/call-it.mp3`
-    },
-    {
-      id: 22,
-      title: 'New Year\'s Day',
-      artist: 'Taylor Swift',
-      albumArt: `${import.meta.env.BASE_URL}album-reputation.jpg`,
-      audioPath: `${import.meta.env.BASE_URL}music/new-year.mp3`
-    },
-    {
-      id: 23,
       title: 'Lavender Haze',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/lavender.mp3`
     },
     {
-      id: 24,
+      id: 39,
       title: 'Maroon',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/maroon.mp3`
     },
     {
-      id: 25,
+      id: 40,
       title: 'Anti-Hero',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/anti.mp3`
     },
     {
-      id: 26,
+      id: 41,
       title: 'Snow on the Beach',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/snow.mp3`
     },
     {
-      id: 27,
+      id: 42,
       title: 'You\'re On Your Own, Kid',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/kid.mp3`
     },
     {
-      id: 28,
+      id: 43,
       title: 'Midnight Rain',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/midnight.mp3`
     },
     {
-      id: 29,
+      id: 44,
       title: 'Question...?',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/question.mp3`
     },
     {
-      id: 30,
+      id: 45,
       title: 'Vigilante Shit',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/vigilante.mp3`
     },
     {
-      id: 31,
+      id: 46,
       title: 'Bejeweled',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/bejeweled.mp3`
     },
     {
-      id: 32,
+      id: 47,
       title: 'Labyrinth',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/labyrinth.mp3`
     },
     {
-      id: 33,
+      id: 48,
       title: 'Karma',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/karma.mp3`
     },
     {
-      id: 34,
+      id: 49,
       title: 'Sweet Nothing',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/sweet.mp3`
     },
     {
-      id: 35,
+      id: 50,
       title: 'The Fate of Ophelia',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/ophelia.mp3`
     },
     {
-      id: 36,
+      id: 51,
       title: 'Elizabeth Taylor',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/elizabeth.mp3`
     },
     {
-      id: 37,
+      id: 52,
       title: 'Opalite',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/opalite.mp3`
     },
     {
-      id: 38,
+      id: 53,
       title: 'Father Figure',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/father.mp3`
     },
     {
-      id: 39,
+      id: 54,
       title: 'Eldest Daughter',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/eldest-daughter.mp3`
     },
     {
-      id: 40,
+      id: 55,
       title: 'Ruin The Friendship',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/ruin-friendship.mp3`
     },
     {
-      id: 41,
+      id: 56,
       title: 'Actually Romantic',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/romantic.mp3`
     },
     {
-      id: 42,
+      id: 57,
       title: 'Wi$h Li$t',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/wish.mp3`
     },
     {
-      id: 43,
+      id: 58,
       title: 'Wood',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/wood.mp3`
     },
     {
-      id: 44,
+      id: 59,
       title: 'CANCELLED!',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/cancelled.mp3`
     },
     {
-      id: 45,
+      id: 60,
       title: 'Honey',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/honey.mp3`
     },
     {
-      id: 46,
+      id: 61,
       title: 'The Life of a Showgirl',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
@@ -506,26 +484,105 @@ function App() {
     setIsPlaying(true)
   }
 
-  // Auto-play and shuffle when song ends
+  // Add song to playlist
+  const handleAddToPlaylist = (song) => {
+    if (!myPlaylist.find(s => s.id === song.id)) {
+      setMyPlaylist(prev => [...prev, song])
+    }
+  }
+
+  // Remove song from playlist
+  const handleRemoveFromPlaylist = (song) => {
+    setMyPlaylist(prev => prev.filter(s => s.id !== song.id))
+  }
+
+  // Reorder playlist (drag and drop)
+  const handleReorderPlaylist = (fromIndex, toIndex) => {
+    setMyPlaylist(prev => {
+      const newPlaylist = [...prev]
+      const [movedItem] = newPlaylist.splice(fromIndex, 1)
+      newPlaylist.splice(toIndex, 0, movedItem)
+      return newPlaylist
+    })
+  }
+
+  // Toggle playback mode
+  const handlePlaybackModeChange = (mode) => {
+    setPlaybackMode(mode)
+  }
+
+  // Switch view between all songs and playlist
+  const handleViewChange = (view) => {
+    setActiveView(view)
+  }
+
+  // Play next song
+  const handleNextSong = () => {
+    const activeSongs = getActiveSongList()
+    const currentIndex = activeSongs.findIndex(s => s.id === currentSong?.id)
+
+    if (playbackMode === 'shuffle') {
+      let nextIndex
+      do {
+        nextIndex = Math.floor(Math.random() * activeSongs.length)
+      } while (nextIndex === currentIndex && activeSongs.length > 1)
+      setCurrentSong(activeSongs[nextIndex])
+    } else {
+      const nextIndex = (currentIndex + 1) % activeSongs.length
+      setCurrentSong(activeSongs[nextIndex])
+    }
+    setIsPlaying(true)
+  }
+
+  // Play previous song
+  const handlePrevSong = () => {
+    const activeSongs = getActiveSongList()
+    const currentIndex = activeSongs.findIndex(s => s.id === currentSong?.id)
+    const prevIndex = currentIndex <= 0 ? activeSongs.length - 1 : currentIndex - 1
+    setCurrentSong(activeSongs[prevIndex])
+    setIsPlaying(true)
+  }
+
+  // Get the active song list based on current view
+  const getActiveSongList = () => {
+    return activeView === 'playlist' && myPlaylist.length > 0 ? myPlaylist : songs
+  }
+
+  // Auto-play when song ends based on playback mode
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
 
     const handleEnded = () => {
-      // Shuffle to next random song
-      const currentIndex = songs.findIndex(s => s.id === currentSong?.id)
-      let nextIndex
-      do {
-        nextIndex = Math.floor(Math.random() * songs.length)
-      } while (nextIndex === currentIndex && songs.length > 1)
+      const activeSongs = getActiveSongList()
+      const currentIndex = activeSongs.findIndex(s => s.id === currentSong?.id)
 
-      setCurrentSong(songs[nextIndex])
-      setIsPlaying(true)
+      if (playbackMode === 'repeat-one') {
+        // Repeat current song
+        audio.currentTime = 0
+        audio.play().catch(err => console.log('Playback prevented:', err))
+        return
+      }
+
+      if (playbackMode === 'sequential') {
+        // Play next song in order
+        const nextIndex = (currentIndex + 1) % activeSongs.length
+        setCurrentSong(activeSongs[nextIndex])
+        setIsPlaying(true)
+      } else {
+        // Shuffle mode - random song
+        let nextIndex
+        do {
+          nextIndex = Math.floor(Math.random() * activeSongs.length)
+        } while (nextIndex === currentIndex && activeSongs.length > 1)
+        setCurrentSong(activeSongs[nextIndex])
+        setIsPlaying(true)
+      }
     }
 
     audio.addEventListener('ended', handleEnded)
     return () => audio.removeEventListener('ended', handleEnded)
-  }, [currentSong, songs])
+  }, [currentSong, songs, playbackMode, activeView, myPlaylist])
 
   // Load and play song when changed
   useEffect(() => {
@@ -699,6 +756,16 @@ function App() {
         duration={duration}
         onPlayPause={handlePlayPause}
         onSeek={handleSeek}
+        playbackMode={playbackMode}
+        onPlaybackModeChange={handlePlaybackModeChange}
+        myPlaylist={myPlaylist}
+        onAddToPlaylist={handleAddToPlaylist}
+        onRemoveFromPlaylist={handleRemoveFromPlaylist}
+        activeView={activeView}
+        onViewChange={handleViewChange}
+        onNextSong={handleNextSong}
+        onPrevSong={handlePrevSong}
+        onReorderPlaylist={handleReorderPlaylist}
       />
 
       {/* CD Case Display Modal */}
