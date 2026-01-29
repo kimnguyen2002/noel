@@ -11,8 +11,6 @@ import GiftBox from './components/GiftBox'
 import Couple from './components/Couple'
 import './App.css'
 
-const MAX_PLAY_HISTORY = 15
-
 function App() {
   const [selectedLetter, setSelectedLetter] = useState(null)
   const [clickedLetters, setClickedLetters] = useState(new Set())
@@ -35,8 +33,55 @@ function App() {
   const shufflePlayedRef = useRef(new Set())
   // Track play request to cancel stale requests and prevent AbortError
   const playRequestIdRef = useRef(0)
-  // Track playback history for proper previous button behavior
-  const playHistoryRef = useRef([])
+  // History of played songs for going back in shuffle mode (max 10 songs per context)
+  // Separate histories for: all, album (by name), playlist
+  const shuffleHistoryRef = useRef({ all: [], album: {}, playlist: [] })
+  // Current position in shuffle history per context (-1 means at the end/newest)
+  const shuffleHistoryIndexRef = useRef({ all: -1, album: {}, playlist: -1 })
+
+  // Helper to get current history context key
+  const getHistoryContext = useCallback(() => {
+    if (activeView === 'albums' && selectedAlbum) {
+      return { type: 'album', key: selectedAlbum }
+    } else if (activeView === 'playlist') {
+      return { type: 'playlist', key: 'playlist' }
+    }
+    return { type: 'all', key: 'all' }
+  }, [activeView, selectedAlbum])
+
+  // Helper to get history array for current context
+  const getHistory = useCallback(() => {
+    const ctx = getHistoryContext()
+    if (ctx.type === 'album') {
+      if (!shuffleHistoryRef.current.album[ctx.key]) {
+        shuffleHistoryRef.current.album[ctx.key] = []
+      }
+      return shuffleHistoryRef.current.album[ctx.key]
+    }
+    return shuffleHistoryRef.current[ctx.type]
+  }, [getHistoryContext])
+
+  // Helper to get history index for current context
+  const getHistoryIndex = useCallback(() => {
+    const ctx = getHistoryContext()
+    if (ctx.type === 'album') {
+      if (shuffleHistoryIndexRef.current.album[ctx.key] === undefined) {
+        shuffleHistoryIndexRef.current.album[ctx.key] = -1
+      }
+      return shuffleHistoryIndexRef.current.album[ctx.key]
+    }
+    return shuffleHistoryIndexRef.current[ctx.type]
+  }, [getHistoryContext])
+
+  // Helper to set history index for current context
+  const setHistoryIndex = useCallback((value) => {
+    const ctx = getHistoryContext()
+    if (ctx.type === 'album') {
+      shuffleHistoryIndexRef.current.album[ctx.key] = value
+    } else {
+      shuffleHistoryIndexRef.current[ctx.type] = value
+    }
+  }, [getHistoryContext])
 
   // Gift box states
   const [isGiftBoxLidOpen, setIsGiftBoxLidOpen] = useState(false)
@@ -520,17 +565,6 @@ function App() {
     setClickedLetters(prev => new Set([...prev, letter.id]))
   }
 
-  // Helper to add song to history with size limit
-  const addToPlayHistory = useCallback((song) => {
-    if (song) {
-      playHistoryRef.current.push(song)
-      // Keep only the last MAX_PLAY_HISTORY songs
-      if (playHistoryRef.current.length > MAX_PLAY_HISTORY) {
-        playHistoryRef.current.shift()
-      }
-    }
-  }, [])
-
   const handleOpenMusicPlayer = () => {
     setIsMusicPlayerOpen(true)
   }
@@ -539,14 +573,31 @@ function App() {
     setIsMusicPlayerOpen(false)
   }
 
-  const handleSongSelect = (song) => {
-    // Add current song to history before switching
-    if (currentSong && currentSong.id !== song.id) {
-      addToPlayHistory(currentSong)
+  const handleSongSelect = useCallback((song) => {
+    // In shuffle mode, add current song to history before selecting new song
+    if (playbackMode === 'shuffle' && currentSong && currentSong.id !== song.id) {
+      const history = getHistory()
+      const historyIndex = getHistoryIndex()
+      
+      // If we're navigating in history and select a new song, truncate forward history
+      if (historyIndex >= 0 && historyIndex < history.length - 1) {
+        // Keep history up to current position, add current song
+        history.splice(historyIndex + 1)
+      }
+      
+      // Add current song to history
+      history.push(currentSong)
+      if (history.length > 10) {
+        history.shift()
+      }
+      
+      // Reset history index to end
+      setHistoryIndex(-1)
     }
+    
     setCurrentSong(song)
     setIsPlaying(true)
-  }
+  }, [playbackMode, currentSong, getHistory, getHistoryIndex, setHistoryIndex])
 
   // Add song to playlist
   const handleAddToPlaylist = (song) => {
@@ -626,50 +677,98 @@ function App() {
   const handleNextSong = useCallback(() => {
     const activeSongs = getActiveSongList()
     const currentIndex = activeSongs.findIndex(s => s.id === currentSong?.id)
-    if (currentIndex !== -1) {
-      // Add current song to history
-      addToPlayHistory(currentSong)
-    }
+    const history = getHistory()
+    const historyIndex = getHistoryIndex()
 
     if (playbackMode === 'shuffle') {
+      // If we're navigating back in history, go forward instead of random
+      if (historyIndex >= 0 && historyIndex < history.length - 1) {
+        setHistoryIndex(historyIndex + 1)
+        const nextSong = history[historyIndex + 1]
+        setCurrentSong(nextSong)
+        setIsPlaying(true)
+        return
+      }
+      
+      // Reset history index to end
+      setHistoryIndex(-1)
+      
+      let nextSong
       // Use smart shuffle for albums and playlist
       if ((activeView === 'albums' && selectedAlbum) || (activeView === 'playlist' && myPlaylist.length > 0)) {
         const nextIndex = getSmartShuffleNextIndex(activeSongs, currentIndex)
-        setCurrentSong(activeSongs[nextIndex])
+        nextSong = activeSongs[nextIndex]
       } else {
         // Normal shuffle for "All" view
         let nextIndex
         do {
           nextIndex = Math.floor(Math.random() * activeSongs.length)
         } while (nextIndex === currentIndex && activeSongs.length > 1)
-        setCurrentSong(activeSongs[nextIndex])
+        nextSong = activeSongs[nextIndex]
       }
+      
+      // Add current song to history before moving to next
+      if (currentSong) {
+        history.push(currentSong)
+        // Keep only last 10 songs in history
+        if (history.length > 10) {
+          history.shift()
+        }
+      }
+      
+      setCurrentSong(nextSong)
     } else {
       const nextIndex = (currentIndex + 1) % activeSongs.length
       setCurrentSong(activeSongs[nextIndex])
     }
     setIsPlaying(true)
-  }, [getActiveSongList, currentSong, playbackMode, activeView, selectedAlbum, myPlaylist, getSmartShuffleNextIndex, addToPlayHistory])
+  }, [getActiveSongList, currentSong, playbackMode, activeView, selectedAlbum, myPlaylist, getSmartShuffleNextIndex, getHistory, getHistoryIndex, setHistoryIndex])
 
   // Play previous song
   const handlePrevSong = useCallback(() => {
-    // If in shuffle mode and there's history, go back to previous played song
-    if (playbackMode === 'shuffle' && playHistoryRef.current.length > 0) {
-      const prevSong = playHistoryRef.current.pop()
-      // Add current song to history for forward navigation
-      addToPlayHistory(currentSong)
-      setCurrentSong(prevSong)
-    } else {
-      // In sequential mode, go to previous in order
-      const activeSongs = getActiveSongList()
-      const currentIndex = activeSongs.findIndex(s => s.id === currentSong?.id)
-      const prevIndex = currentIndex <= 0 ? activeSongs.length - 1 : currentIndex - 1
-      setCurrentSong(activeSongs[prevIndex])
-      // Add current song to history
-      addToPlayHistory(currentSong)
+    const activeSongs = getActiveSongList()
+    
+    if (playbackMode === 'shuffle') {
+      // In shuffle mode, go back through history
+      const history = getHistory()
+      const historyIndex = getHistoryIndex()
+      
+      if (history.length > 0) {
+        // If we're at the end (just played a new song), add current to enable forward navigation
+        if (historyIndex === -1) {
+          // Add current song to history so we can come back to it
+          if (currentSong) {
+            history.push(currentSong)
+            if (history.length > 10) {
+              history.shift()
+            }
+          }
+          setHistoryIndex(history.length - 2) // Go to second-to-last (previous song)
+        } else if (historyIndex > 0) {
+          setHistoryIndex(historyIndex - 1)
+        } else {
+          // Already at the beginning of history, can't go back further
+          return
+        }
+        
+        const newIndex = getHistoryIndex()
+        if (newIndex >= 0) {
+          const prevSong = history[newIndex]
+          setCurrentSong(prevSong)
+          setIsPlaying(true)
+          return
+        }
+      }
+      // No history available, just play current song
+      return
     }
+    
+    // Sequential or repeat-one mode: go to previous in order
+    const currentIndex = activeSongs.findIndex(s => s.id === currentSong?.id)
+    const prevIndex = currentIndex <= 0 ? activeSongs.length - 1 : currentIndex - 1
+    setCurrentSong(activeSongs[prevIndex])
     setIsPlaying(true)
-  }, [getActiveSongList, currentSong, playbackMode, addToPlayHistory])
+  }, [getActiveSongList, currentSong, playbackMode, getHistory, getHistoryIndex, setHistoryIndex])
 
   // Auto-play when song ends based on playback mode
   useEffect(() => {
@@ -683,8 +782,6 @@ function App() {
       if (playbackMode === 'repeat-one') {
         // Repeat current song
         audio.currentTime = 0
-        // Clear history when repeating the same song
-        playHistoryRef.current = []
         audio.play().catch(err => {
           if (err.name !== 'AbortError') {
             console.log('Playback error:', err)
@@ -695,31 +792,41 @@ function App() {
 
       if (playbackMode === 'sequential') {
         // Play next song in order
-        addToPlayHistory(currentSong)
         const nextIndex = (currentIndex + 1) % activeSongs.length
         setCurrentSong(activeSongs[nextIndex])
         setIsPlaying(true)
       } else {
-        // Shuffle mode - use smart shuffle for albums and playlist
-        addToPlayHistory(currentSong)
+        // Shuffle mode - add current song to history and reset index
+        const history = getHistory()
+        if (currentSong) {
+          history.push(currentSong)
+          if (history.length > 10) {
+            history.shift()
+          }
+        }
+        setHistoryIndex(-1)
+        
+        // Use smart shuffle for albums and playlist
+        let nextSong
         if ((activeView === 'albums' && selectedAlbum) || (activeView === 'playlist' && myPlaylist.length > 0)) {
           const nextIndex = getSmartShuffleNextIndex(activeSongs, currentIndex)
-          setCurrentSong(activeSongs[nextIndex])
+          nextSong = activeSongs[nextIndex]
         } else {
           // Normal shuffle for "All" view
           let nextIndex
           do {
             nextIndex = Math.floor(Math.random() * activeSongs.length)
           } while (nextIndex === currentIndex && activeSongs.length > 1)
-          setCurrentSong(activeSongs[nextIndex])
+          nextSong = activeSongs[nextIndex]
         }
+        setCurrentSong(nextSong)
         setIsPlaying(true)
       }
     }
 
     audio.addEventListener('ended', handleEnded)
     return () => audio.removeEventListener('ended', handleEnded)
-  }, [currentSong, playbackMode, activeView, myPlaylist, selectedAlbum, getActiveSongList, getSmartShuffleNextIndex, addToPlayHistory])
+  }, [currentSong, playbackMode, activeView, myPlaylist, selectedAlbum, getActiveSongList, getSmartShuffleNextIndex, getHistory, setHistoryIndex])
 
   // Load and play song when changed
   useEffect(() => {
