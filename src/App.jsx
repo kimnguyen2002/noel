@@ -382,83 +382,90 @@ function App() {
     },
     {
       id: 50,
+      title: 'Mastermind',
+      artist: 'Taylor Swift',
+      albumArt: `${import.meta.env.BASE_URL}album-midnights.jpg`,
+      audioPath: `${import.meta.env.BASE_URL}music/mastermind.mp3`
+    },
+    {
+      id: 51,
       title: 'The Fate of Ophelia',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/ophelia.mp3`
     },
     {
-      id: 51,
+      id: 52,
       title: 'Elizabeth Taylor',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/elizabeth.mp3`
     },
     {
-      id: 52,
+      id: 53,
       title: 'Opalite',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/opalite.mp3`
     },
     {
-      id: 53,
+      id: 54,
       title: 'Father Figure',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/father.mp3`
     },
     {
-      id: 54,
+      id: 55,
       title: 'Eldest Daughter',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/eldest-daughter.mp3`
     },
     {
-      id: 55,
+      id: 56,
       title: 'Ruin The Friendship',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/ruin-friendship.mp3`
     },
     {
-      id: 56,
+      id: 57,
       title: 'Actually Romantic',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/romantic.mp3`
     },
     {
-      id: 57,
+      id: 58,
       title: 'Wi$h Li$t',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/wish.mp3`
     },
     {
-      id: 58,
+      id: 59,
       title: 'Wood',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/wood.mp3`
     },
     {
-      id: 59,
+      id: 60,
       title: 'CANCELLED!',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/cancelled.mp3`
     },
     {
-      id: 60,
+      id: 61,
       title: 'Honey',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
       audioPath: `${import.meta.env.BASE_URL}music/honey.mp3`
     },
     {
-      id: 61,
+      id: 62,
       title: 'The Life of a Showgirl',
       artist: 'Taylor Swift',
       albumArt: `${import.meta.env.BASE_URL}album-showgirl.jpg`,
